@@ -12,9 +12,9 @@ Available Maven targets:
 
 * `mvn build` - build the project.
 * `mvn test` - build and run all tests.
-* `mvn exec:java` - start shell right away after building. You should build the project first.
+* `mvn exec:java` - start app right away after building. You should build the project first.
 * `mvn package` - build, run all tests, create JAR files in `target/` subdirectory (one without dependencies, one with full set of dependencies).
-You can run the latter with `java -jar target/shell-1.0-SNAPSHOT-jar-with-dependencies.jar`.
+You can run the latter with `java -jar target/roguelike-1.0-SNAPSHOT-jar-with-dependencies.jar`.
 * `mvn clean` - remove all generated files.
 
 # Building with IntelliJ IDEA
