@@ -5,7 +5,8 @@ import net.yeputons.spbau.fall2016.roguelike.map.ActingObject
 
 abstract class AbstractMob : ActingObject {
     abstract protected val initialHealth: Int
-    abstract protected val defensePoints: Int
+    abstract val attackPoints: Int
+    abstract val defensePoints: Int
     abstract fun die(logger: GameMessageLogger)
 
     private var health_: Int? = null
@@ -22,6 +23,7 @@ abstract class AbstractMob : ActingObject {
 
     fun attacked(points: Int, logger: GameMessageLogger) {
         health -= Math.max(0, points - defensePoints)
+        health = Math.max(0, health)
         if (health == 0) {
             die(logger)
         }

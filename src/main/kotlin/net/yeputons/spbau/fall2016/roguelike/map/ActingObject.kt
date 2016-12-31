@@ -1,5 +1,7 @@
 package net.yeputons.spbau.fall2016.roguelike.map
 
+import java.awt.Point
+
 interface ActingObject : Displayable {
     fun getNextTurn(): Position
     fun makeNextTurn()

@@ -17,15 +17,15 @@ class Player(private var currentPosition: Position) : AbstractMob() {
 
     companion object {
         private fun popArtifact(list: MutableList<AbstractArtifact>, artifact: AbstractArtifact) {
-            var found = false
+            var found : Int? = null
             list.forEachIndexed { i, elem ->
                 if (elem === artifact) {
-                    found = true
-                    list.removeAt(i)
+                    found = i
                 }
             }
-            if (!found)
+            if (found === null)
                 throw IllegalArgumentException("Artifact was not found in the list")
+            list.removeAt(found!!)
         }
     }
 
@@ -34,7 +34,7 @@ class Player(private var currentPosition: Position) : AbstractMob() {
     }
 
     fun putOn(artifact: AbstractArtifact) {
-        if (wearing.size > maxWearing) {
+        if (wearing.size >= maxWearing) {
             throw IllegalArgumentException("Cannot wear more than {$maxWearing}")
         }
         popArtifact(inventory_, artifact)
@@ -53,7 +53,8 @@ class Player(private var currentPosition: Position) : AbstractMob() {
         )
     }
 
-    override val position = currentPosition
+    override val position: Position
+        get() = currentPosition
 
     override fun makeNextTurn() {
         currentPosition = getNextTurn()
@@ -66,7 +67,19 @@ class Player(private var currentPosition: Position) : AbstractMob() {
         nextTurn = PlayerTurnDirection.STAY
     }
 
-    override val initialHealth = 20
+    override val initialHealth = 5
+
+     override val attackPoints: Int
+        get() {
+            val sumChange = wearing.map { a ->
+                if (a is PlayerStatsChanger)
+                    a.changeAttack
+                else
+                    0
+            }.sum()
+            return Math.max(0, sumChange)
+        }
+
     override val defensePoints: Int
         get() {
             val sumChange = wearing.map { a ->
@@ -75,7 +88,7 @@ class Player(private var currentPosition: Position) : AbstractMob() {
                 else
                     0
             }.sum()
-            return Math.max(0, sumChange)
+            return Math.max(0, 1 + sumChange)
         }
 
     override fun die(logger: GameMessageLogger) {
